@@ -1,0 +1,15 @@
+#!/usr/bin/expect 
+
+spawn sqlite3 ./testdb
+
+expect {
+    "sqlite>" {send ".header on\r"}
+}
+expect {
+    "sqlite>" {send ".mode column\r"}
+}
+expect {
+    "sqlite>" {send ".timer on\r"}
+}
+
+interact

@@ -1,0 +1,18 @@
+﻿<html>
+<head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
+<body>
+<h1>发送邮件</h1>
+
+    <form action="mail.php" method="post">
+        <p>邮件主题：<input type="text" name="sub"></p>
+        <p>邮件内容：<input type="text" name="content"></p>
+        <p>发送对象：<input type="text" name="to_addr"><font size="2"> 多个地址请用半角分号或者逗号(; or ,)分隔  </font></p>
+        <input type="submit" value="点击发送">
+    </form>
+
+<p style="color:grey"><font size="2">可使用<strong> curl -d "sub=邮件主题&content=邮件内容&to_addr=发送对象" http://116.211.16.134/mail/mail.php </strong>调用该页面</font></p>
+<br />
+<br />
+<br />
+<br />
+<br />
