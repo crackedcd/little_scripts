@@ -76,18 +76,29 @@ function add_route() {
     local net_list=$*
     for nets in ${net_list}
     do
-        net=$(echo ${nets} | awk -F'|' '{print $1}')
-        mask=$(echo ${nets} | awk -F'|' '{print $2}')
-        if [ $(/sbin/route -n | grep ${net} -c) -lt 1 ]
+        if [ $(echo ${nets} | awk -F'|' '{print $1}' | fgrep '/' -c) -eq 1 ]
         then
-            echo /sbin/route add net ${net} netmask ${mask} gw ${gate_way}
-            # do real route add.
+            net=$(echo ${nets} | awk -F'|' '{print $1}' | awk -F'/' '{print $1}')
+            mask=$(echo ${nets} | awk -F'|' '{print $2}')
+            if [ $(/sbin/route -n | grep ${net} -c) -lt 1 ]
+            then
+                echo /sbin/route add -net ${net} netmask ${mask} gw ${gate_way}
+                # do real route add.
+            fi
+        else
+            net=$(echo ${nets} | awk -F'|' '{print $1}')
+            mask=$(echo ${nets} | awk -F'|' '{print $2}')
+            if [ $(/sbin/route -n | grep ${net} -c) -lt 1 ]
+            then
+                echo /sbin/route add -host ${net} netmask ${mask} gw ${gate_way}
+                # do real route add.
+            fi
         fi
     done
 }
 
 function main() {
-    local net_list="100.64.0.0/10|255.192.0.0  1.2.3.4/10|255.255.0.0"
+    local net_list="100.64.0.0/10|255.192.0.0  1.2.3.4/10|255.255.0.0  4.3.2.1|255.255.255.0"
     add_route ${net_list}
 }
 
