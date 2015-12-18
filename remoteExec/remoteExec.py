@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# coding: utf-8
+
 
 '''
     Author: yuchao
 
-    Last modified: 2015-09-24 14:43
+    Last modified: 2015-12-18 10:25
 
     Filename: remoteExec.py
 
@@ -20,6 +20,7 @@ from pprint import pprint
 from multiprocessing import Pool
 import threading
 import subprocess
+import mysql.connector
 import time
 import os
 import stackless
@@ -41,16 +42,18 @@ def remote_cmd(ip, pwd, cmd):
         ssh.connect(ip, port, usr, pwd)
         # (stdin, stdout, stderr) = ssh.exec_command(cmd)
         result_list = ssh.exec_command(cmd)
-        format_paramiko_out(result_list)
+        print("%s" % format_paramiko_out(result_list))
     except paramiko.ssh_exception.BadAuthenticationType as bad_auth_e:
         print("%s. %s can't be login by %s." % (bad_auth_e, ip, pwd))
+    except TimeoutError as timeout_e:
+        print("connect to %s timeout: %s." % (ip, timeout_e))
 
 
 def remote_cmd_schedule(ip, pwd, cmd):
     '''
     almost like remote_cmd(), but use stackless.schedule().
     '''
-    
+
     usr = 'root'  # tx default ssh user.
     port = 36000  # tx default ssh port.
 
@@ -61,7 +64,7 @@ def remote_cmd_schedule(ip, pwd, cmd):
         ssh.connect(ip, port, usr, pwd)
         result_list = ssh.exec_command(cmd)
         stackless.schedule()  # when ssh.exec_command BLOCK(spend a lot of time), schedule this function to the rear of task queue, call next function.
-        format_paramiko_out(result_list)
+        print("%s" % format_paramiko_out(result_list))
     except paramiko.ssh_exception.BadAuthenticationType as bad_auth_e:
         print("%s. %s can't be login by %s." % (bad_auth_e, ip, pwd))
 
@@ -72,17 +75,16 @@ def send_file(ip, pwd, local_path = os.path.split(os.path.realpath(sys.argv[0]))
     '''
     usr = 'root'  # tx default ssh user.
     port = 36000  # tx default ssh port.
-    t = paramiko.Transport((ip, port))  
     try:
+        t = paramiko.Transport((ip, port))
         t.connect(username = usr, password = pwd)
         sftp = paramiko.SFTPClient.from_transport(t)
         sftp.put(os.path.join(local_path, file), os.path.join(remote_path, file))
+        t.close()
     except paramiko.ssh_exception.BadAuthenticationType as bad_auth_e:
         print("%s. %s can't be login by %s." % (bad_auth_e, ip, pwd))
     except paramiko.ssh_exception.SSHException as ssh_e:
         print("%s. %s can't be login by %s." % (ssh_e, ip, pwd))
-    finally:
-        t.close()
 
 
 def getpasswd(ip):
@@ -116,7 +118,7 @@ def format_paramiko_out(paramiko_out_list):
     for ln in list(out_list):
         print('%s' % ln.strip())
     minus_str = '-' * len(ln)  # string like many '------'
-    print('%s' % minus_str)
+    return '%s' % minus_str
 
 
 def multi_exec(ip_pwd_dict, cmd):
@@ -164,6 +166,8 @@ def coroutine_exec(ip_pwd_dict, cmd):
     for (ip, pwd) in list(ip_pwd_dict.items()):
         spawn_list.append(gevent.spawn(remote_cmd, ip, pwd, cmd))
     gevent.joinall(spawn_list)
+    print('\n%d servers done.\n' % len(list(ip_pwd_dict.items())))
+    #print("Task finished, press 'Ctrl + C' to finish.")
 
 
 def threading_exec(ip_pwd_dict, cmd):
@@ -323,5 +327,4 @@ if __name__ == '__main__':
     # exec_files(ips_list, bash_file)
     end_time = time.time()
     print('Script elapsed : %ss.' % (end_time - start_time))
-
 
