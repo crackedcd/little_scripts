@@ -3,7 +3,7 @@
 
 import os
 import logging
-from logging.handlers import import RotatingFileHandler
+from logging.handlers import RotatingFileHandler
 
 
 class Log(object):
@@ -45,6 +45,6 @@ class Log(object):
         stdout_handler.setFormatter(formatter)
         stderr_handler.setFormatter(formatter)
 
-        logging.getLogger('').addHandler(stdout_handler))
-        logging.getLogger('').addHandler(stderr_handler))
+        logging.getLogger('').addHandler(stdout_handler)
+        logging.getLogger('').addHandler(stderr_handler)
 

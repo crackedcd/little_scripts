@@ -2,6 +2,7 @@
 
 
 import os
+import threading
 import d.daemon
 import d.call
 
@@ -41,8 +42,11 @@ class DaemonRoot(d.daemon.Daemon):
         # do something here.
 
         c = d.call.CallLoop()
-        c.loop()
+        t = threading.Thread(target = c.send_info)
+        t.start()
+        t = threading.Thread(target = c.send_alarm)
+        t.start()
+        t.join()
 
         print("service is running...")
-
 
