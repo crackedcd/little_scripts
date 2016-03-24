@@ -30,8 +30,8 @@ class CallLoop(object):
         time_step_seconds = 10
 
         while True:
-            sys.stdout.write("%s\n" % time.ctime())
-            sys.stdout.flush()
+            # sys.stdout.write("%s\n" % time.ctime())
+            # sys.stdout.flush()
             time.sleep(time_step_seconds)
 
             # call really methods.
@@ -47,8 +47,8 @@ class CallLoop(object):
         time_step_seconds = 1
 
         while True:
-            sys.stdout.write("%s\n" % time.ctime())
-            sys.stdout.flush()
+            # sys.stdout.write("%s\n" % time.ctime())
+            # sys.stdout.flush()
             time.sleep(time_step_seconds)
 
             # call really methods.
@@ -60,12 +60,17 @@ class CallLoop(object):
         really methods defined in self.__init__() and running here in this function.
         '''
 
+        '''
         # append threading task.
         t = threading.Thread(target = self.__ping.run())
         t.start()
 
         # execute all threading task.
         t.join()
+        '''
+
+        ping = d.modules.ping.Ping()
+        threading.Thread(target = ping.run()).start()
 
 
     def __info(self):
@@ -73,6 +78,7 @@ class CallLoop(object):
         really methods defined in self.__init__() and running here in this function.
         '''
 
+        '''
         # append threading task.
         t = threading.Thread(target = self.__alert.run())
         t.start()
@@ -81,4 +87,10 @@ class CallLoop(object):
 
         # execute all threading task.
         t.join()
+        '''
+
+        alert = d.modules.alert.Alert()
+        threading.Thread(target = alert.run()).start()
+        alert2 = d.modules.alert2.Alert2()
+        threading.Thread(target = alert2.run()).start()
 
