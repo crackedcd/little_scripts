@@ -5,5 +5,12 @@ time=$(date +\%Y\%m\%d\%H\%M\%S)
 log_file="logs/${time}.log"
 script_file="jojo.sh"
 
-cat giogio.sh | grep -Ev "^( )*#|^$" 2>&1 | tee ${log_file}
-python remoteExec.py ${script_file} 2>&1 | tee ${log_file}
+cat ${script_file} | grep -Ev "^( )*#|^$" 2>&1 | tee -a ${log_file} 2>&1
+echo 
+echo '############################################################'
+echo '############################################################'
+echo 
+python remoteExec.py ${script_file} 2>&1 | tee -a ${log_file} 2>&1
+
+echo "see log at [${log_file}]."
+
