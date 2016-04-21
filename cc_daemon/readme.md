@@ -8,7 +8,7 @@ Description: python daemon scripts.
 
 Usage:
 
-    python main.py [start|stop|restart]
+    cd /path/cc_daemon/; python main.py [start|stop|restart]
 
     add scripts [test_method.py] into d/modules/.
 

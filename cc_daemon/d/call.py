@@ -7,6 +7,7 @@ import threading
 import d.modules.ping
 import d.modules.alert
 import d.modules.alert2
+import d.modules.cmq_monitor
 
 
 class CallLoop(object):
@@ -16,9 +17,7 @@ class CallLoop(object):
         '''
         statement specific objects here as self private variables and functions.
         '''
-        self.__ping = d.modules.ping.Ping()
-        self.__alert = d.modules.alert.Alert()
-        self.__alert2 = d.modules.alert2.Alert2()
+        pass
 
 
     def send_alarm(self):
@@ -27,15 +26,15 @@ class CallLoop(object):
         '''
 
         # time step length (s).
-        time_step_seconds = 10
+        time_step_seconds = 2
 
         while True:
+            # call really methods.
+            threading.Thread(target = self.__alarm()).start()
+
             # sys.stdout.write("%s\n" % time.ctime())
             # sys.stdout.flush()
             time.sleep(time_step_seconds)
-
-            # call really methods.
-            self.__alarm()
 
 
     def send_info(self):
@@ -44,15 +43,15 @@ class CallLoop(object):
         '''
 
         # time step length (s).
-        time_step_seconds = 1
+        time_step_seconds = 60
 
         while True:
+            # call really methods.
+            threading.Thread(target = self.__info()).start()
+
             # sys.stdout.write("%s\n" % time.ctime())
             # sys.stdout.flush()
             time.sleep(time_step_seconds)
-
-            # call really methods.
-            self.__info()
 
 
     def __alarm(self):
@@ -69,8 +68,9 @@ class CallLoop(object):
         t.join()
         '''
 
-        ping = d.modules.ping.Ping()
-        threading.Thread(target = ping.run()).start()
+        #ping = d.modules.ping.Ping()
+        #threading.Thread(target = ping.run()).start()
+        pass
 
 
     def __info(self):
@@ -89,8 +89,11 @@ class CallLoop(object):
         t.join()
         '''
 
-        alert = d.modules.alert.Alert()
-        threading.Thread(target = alert.run()).start()
-        alert2 = d.modules.alert2.Alert2()
-        threading.Thread(target = alert2.run()).start()
+        #alert = d.modules.alert.Alert()
+        #threading.Thread(target = alert.run()).start()
+        #alert2 = d.modules.alert2.Alert2()
+        #threading.Thread(target = alert2.run()).start()
+
+        cmq_monitor = d.modules.cmq_monitor.CMQMonitor()
+        threading.Thread(target = cmq_monitor.run()).start()
 
