@@ -61,7 +61,7 @@ class CallLoop(object):
 
         '''
         # append threading task.
-        t = threading.Thread(target = self.__ping.run())
+        t = threading.Thread(target = self.__ping.run)
         t.start()
 
         # execute all threading task.
@@ -69,7 +69,7 @@ class CallLoop(object):
         '''
 
         #ping = d.modules.ping.Ping()
-        #threading.Thread(target = ping.run()).start()
+        #threading.Thread(target = ping.run).start()
         pass
 
 
@@ -80,9 +80,9 @@ class CallLoop(object):
 
         '''
         # append threading task.
-        t = threading.Thread(target = self.__alert.run())
+        t = threading.Thread(target = self.__alert.run)
         t.start()
-        t = threading.Thread(target = self.__alert2.run())
+        t = threading.Thread(target = self.__alert2.run)
         t.start()
 
         # execute all threading task.
@@ -90,10 +90,10 @@ class CallLoop(object):
         '''
 
         #alert = d.modules.alert.Alert()
-        #threading.Thread(target = alert.run()).start()
+        #threading.Thread(target = alert.run).start()
         #alert2 = d.modules.alert2.Alert2()
-        #threading.Thread(target = alert2.run()).start()
+        #threading.Thread(target = alert2.run).start()
 
         cmq_monitor = d.modules.cmq_monitor.CMQMonitor()
-        threading.Thread(target = cmq_monitor.run()).start()
+        threading.Thread(target = cmq_monitor.run).start()
 
