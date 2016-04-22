@@ -17,7 +17,9 @@ class CallLoop(object):
         '''
         statement specific objects here as self private variables and functions.
         '''
-        pass
+        # time step length (s).
+        self.__info_step_seconds = 60
+        self.__alarm_step_seconds = 2
 
 
     def send_alarm(self):
@@ -25,33 +27,31 @@ class CallLoop(object):
         outter methods call this class to send alarm immediately by send_alarm() method.
         '''
 
-        # time step length (s).
-        time_step_seconds = 2
 
-        while True:
+        # while True:
             # call really methods.
-            threading.Thread(target = self.__alarm()).start()
+            # threading.Thread(target = self.__alarm()).start()
 
             # sys.stdout.write("%s\n" % time.ctime())
             # sys.stdout.flush()
-            time.sleep(time_step_seconds)
+            # time.sleep(self.__alarm_step_seconds)
 
+        threading.Timer(self.__alarm_step_seconds, self.__alarm).start()
 
     def send_info(self):
         '''
         outter methods call this class to send info regularly by send_info() method.
         '''
 
-        # time step length (s).
-        time_step_seconds = 60
-
-        while True:
+        # while True:
             # call really methods.
-            threading.Thread(target = self.__info()).start()
+            # threading.Thread(target = self.__info()).start()
 
             # sys.stdout.write("%s\n" % time.ctime())
             # sys.stdout.flush()
-            time.sleep(time_step_seconds)
+            # time.sleep(time_step_seconds)
+
+        threading.Timer(self.__info_step_seconds, self.__info).start()
 
 
     def __alarm(self):
@@ -70,7 +70,8 @@ class CallLoop(object):
 
         #ping = d.modules.ping.Ping()
         #threading.Thread(target = ping.run).start()
-        pass
+
+        threading.Timer(self.__alarm_step_seconds, self.__alarm).start()
 
 
     def __info(self):
@@ -96,4 +97,6 @@ class CallLoop(object):
 
         cmq_monitor = d.modules.cmq_monitor.CMQMonitor()
         threading.Thread(target = cmq_monitor.run).start()
+
+        threading.Timer(self.__info_step_seconds, self.__info).start()
 
