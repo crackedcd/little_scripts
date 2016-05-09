@@ -18,41 +18,38 @@ class CallLoop(object):
         statement specific objects here as self private variables and functions.
         '''
         # time step length (s).
-        self.__info_step_seconds = 60
-        self.__alarm_step_seconds = 2
-
+        self.__info_step_seconds = 5
+        self.__alarm_step_seconds = 5
 
     def send_alarm(self):
         '''
         outter methods call this class to send alarm immediately by send_alarm() method.
         '''
 
-
-        # while True:
+        while True:
             # call really methods.
-            # threading.Thread(target = self.__alarm()).start()
+            threading.Thread(target = self.__alarm()).start()
+            time.sleep(self.__alarm_step_seconds)
 
             # sys.stdout.write("%s\n" % time.ctime())
             # sys.stdout.flush()
-            # time.sleep(self.__alarm_step_seconds)
 
-        threading.Timer(self.__alarm_step_seconds, self.__alarm).start()
+        #threading.Timer(self.__alarm_step_seconds, self.__alarm).start()
 
     def send_info(self):
         '''
         outter methods call this class to send info regularly by send_info() method.
         '''
 
-        # while True:
+        while True:
             # call really methods.
-            # threading.Thread(target = self.__info()).start()
+            threading.Thread(target = self.__info()).start()
+            time.sleep(self.__info_step_seconds)
 
             # sys.stdout.write("%s\n" % time.ctime())
             # sys.stdout.flush()
-            # time.sleep(time_step_seconds)
 
-        threading.Timer(self.__info_step_seconds, self.__info).start()
-
+        #threading.Timer(self.__info_step_seconds, self.__info).start()
 
     def __alarm(self):
         '''
@@ -71,8 +68,7 @@ class CallLoop(object):
         #ping = d.modules.ping.Ping()
         #threading.Thread(target = ping.run).start()
 
-        threading.Timer(self.__alarm_step_seconds, self.__alarm).start()
-
+        #threading.Timer(self.__alarm_step_seconds, self.__alarm).start()
 
     def __info(self):
         '''
@@ -95,8 +91,8 @@ class CallLoop(object):
         #alert2 = d.modules.alert2.Alert2()
         #threading.Thread(target = alert2.run).start()
 
-        cmq_monitor = d.modules.cmq_monitor.CMQMonitor()
-        threading.Thread(target = cmq_monitor.run).start()
+        cgi_monitor = d.modules.cgi_monitor.CGI_MONITOR()
+        threading.Thread(target = cgi_monitor.run).start()
 
-        threading.Timer(self.__info_step_seconds, self.__info).start()
+        #threading.Timer(self.__info_step_seconds, self.__info).start()
 
