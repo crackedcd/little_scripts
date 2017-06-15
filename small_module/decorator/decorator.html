@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <style type="text/css">
+  body {
+      margin: auto;
+      padding-right: 1em;
+      padding-left: 1em;
+      max-width: 60em;
+      border-left: 1px solid black;
+      border-right: 1px solid black;
+      color: black;
+      font-family: Microsoft Yahei, Consolas, monaco, monospace, sans-serif;
+      font-size: 100%;
+      line-height: 140%;
+      color: #333; 
+  }
+  table, th, td {
+      border: 1px solid blue;
+  }
+  blockquote {
+      padding: 2px;
+      background-color: #BBBBBB;
+      border-top: 1px solid #222222;  
+      border-bottom: 1px solid #222222;  
+      border-left: 1px solid #222222;  
+      border-right: 1px solid #222222;  
+      margin: 2px;  
+      background-position: top left;  
+      background-repeat: no-repeat;  
+      text-indent: 10px;
+  }
+  p {
+      line-height: 150%;
+      margin-top: 10px;
+      margin-bottom: 10px;
+  }
+  h1 {
+      margin-top: 50px;
+      margin-bottom: 50px;
+  }
+  h2 {
+      margin-top: 30px;
+      margin-bottom: 20px;
+  }
+  h3 {
+      margin-top: 20px;
+      margin-bottom: 10px;
+  }
+  h4 {
+      margin-top: 10px;
+      margin-bottom: 5px;
+  }
+  </style>
+</head>
+<body>
+<h1 id="decorator">decorator</h1>
+<h2 id="基本的嵌套高阶函数">1.基本的嵌套高阶函数</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> wholelogin(func):
+    <span class="kw">def</span> __innerlogin():
+        <span class="bu">print</span>(<span class="st">'enter login.'</span>)
+        func()
+        <span class="bu">print</span>(<span class="st">'exit login.'</span>)
+    <span class="cf">return</span> __innerlogin
+
+<span class="kw">def</span> login():
+    <span class="bu">print</span>(<span class="st">'is login.'</span>)
+
+wholelogin(login)</code></pre></div>
+<p><em>执行结果:</em></p>
+<pre><code>enter login.
+is login.
+exit login.</code></pre>
+<h2 id="函数本身是对象-将高阶函数赋值给变量">2.函数本身是对象, 将高阶函数赋值给变量</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> wholelogin(func):
+    <span class="kw">def</span> __innerlogin():
+        <span class="bu">print</span>(<span class="st">'enter login.'</span>)
+        func()
+        <span class="bu">print</span>(<span class="st">'exit login.'</span>)
+    <span class="cf">return</span> __innerlogin
+
+<span class="kw">def</span> login():
+    <span class="bu">print</span>(<span class="st">'is login.'</span>)
+
+a <span class="op">=</span> wholelogin(login)
+a()</code></pre></div>
+<p><em>执行结果:</em></p>
+<pre><code>enter login.
+is login.
+exit login.</code></pre>
+<h2 id="赋值的时候把高阶函数赋值给一个和内嵌函数同名的变量">3.赋值的时候把高阶函数赋值给一个和内嵌函数同名的变量</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> wholelogin(func):
+    <span class="kw">def</span> __innerlogin():
+        <span class="bu">print</span>(<span class="st">'enter login.'</span>)
+        func()
+        <span class="bu">print</span>(<span class="st">'exit login.'</span>)
+    <span class="cf">return</span> __innerlogin
+
+<span class="kw">def</span> login():
+    <span class="bu">print</span>(<span class="st">'is login.'</span>)
+
+login <span class="op">=</span> wholelogin(login)
+login()</code></pre></div>
+<p><em>执行结果:</em></p>
+<pre><code>enter login.
+is login.
+exit login.</code></pre>
+<h2 id="改成decorator">4.改成decorator</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> wholelogin(func):
+    <span class="kw">def</span> __innerlogin():
+        <span class="bu">print</span>(<span class="st">'enter login.'</span>)
+        func()
+        <span class="bu">print</span>(<span class="st">'exit login.'</span>)
+    <span class="cf">return</span> __innerlogin
+
+<span class="at">@wholelogin</span>
+<span class="co"># 这个@func_parent的出现, 说明它下方的第一个函数func_son会被解释成一个decorator, 且转换到func_son同名的变量.</span>
+<span class="co"># 即login = wholelogin(login)</span>
+<span class="co"># 中间可以任意加空行或者注释, 但是不可以有其他逻辑或者变量赋值</span>
+<span class="kw">def</span> login():
+    <span class="bu">print</span>(<span class="st">'is login.'</span>)
+
+login()</code></pre></div>
+<p><em>执行结果:</em></p>
+<pre><code>enter login.
+is login.
+exit login.</code></pre>
+<h2 id="有参数的decorator">5.有参数的decorator</h2>
+<h3 id="函数带参数">1) 函数带参数</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> wholelogin(func):
+    <span class="kw">def</span> __innerlogin(login_args):
+        <span class="bu">print</span>(<span class="st">'enter login.'</span>)
+        func(login_args)
+        <span class="bu">print</span>(<span class="st">'exit login.'</span>)
+    <span class="cf">return</span> __innerlogin
+
+<span class="at">@wholelogin</span>
+<span class="kw">def</span> login(name):
+    <span class="bu">print</span>(<span class="st">'</span><span class="sc">%s</span><span class="st"> is login.'</span> <span class="op">%</span> name)
+
+login(<span class="st">'cc'</span>)</code></pre></div>
+<p><em>执行结果:</em></p>
+<pre><code>enter login.
+cc is login.
+exit login.</code></pre>
+<h3 id="装饰器带参数-再增加一层函数阶级">2) 装饰器带参数 (再增加一层函数阶级)</h3>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> outter_wholelogin(decorator_args):
+    <span class="kw">def</span> wholelogin(func):
+        <span class="kw">def</span> __innerlogin(login_args):
+            <span class="bu">print</span>(<span class="st">'get param: </span><span class="sc">%s</span><span class="st">.'</span> <span class="op">%</span> decorator_args)
+            <span class="bu">print</span>(<span class="st">'enter login.'</span>)
+            func(login_args)
+            <span class="bu">print</span>(<span class="st">'exit login.'</span>)
+        <span class="cf">return</span> __innerlogin
+    <span class="cf">return</span> wholelogin
+
+<span class="at">@outter_wholelogin</span>(decorator_args<span class="op">=</span><span class="st">'XXX'</span>)
+<span class="kw">def</span> login(name):
+    <span class="bu">print</span>(<span class="st">'</span><span class="sc">%s</span><span class="st"> is login.'</span> <span class="op">%</span> name)
+
+login(<span class="st">'cc'</span>)</code></pre></div>
+<p><em>执行结果:</em></p>
+<pre><code>get param: this is XXX.
+enter login.
+is login.
+exit login.</code></pre>
+<blockquote>
+<p>整个login('cc')的调用过程是:</p>
+<p>[<strong>decorated</strong>]login('cc') =&gt;</p>
+<p>outter_wholelogin('XXX') =&gt;</p>
+<p>wholelogin<a href="login"><strong>with closure value 'XXX'</strong></a>('cc') =&gt;</p>
+<p>__decorator('cc')[<strong>use value 'XXX'</strong>] =&gt;</p>
+<p>[<strong>real</strong>]login('cc')</p>
+</blockquote>
+<h2 id="有返回的decorator-低阶函数返回-高阶函数将低阶函数的返回返回">6.有返回的decorator, 低阶函数返回, 高阶函数将低阶函数的返回返回</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> wholelogin(func):
+    <span class="kw">def</span> __innerlogin(login_args):
+        result <span class="op">=</span> func(login_args)
+        <span class="cf">return</span> result
+    <span class="cf">return</span> __innerlogin
+
+<span class="at">@wholelogin</span>
+<span class="kw">def</span> login(name):
+    <span class="cf">if</span> name <span class="op">==</span> <span class="st">'cc'</span>:
+        <span class="cf">return</span> <span class="va">True</span>
+    <span class="cf">else</span>:
+        <span class="cf">return</span> <span class="va">False</span>
+
+result1 <span class="op">=</span> login(<span class="st">'c'</span>)
+result2 <span class="op">=</span> login(<span class="st">'cc'</span>)
+result3 <span class="op">=</span> login(<span class="st">'ccc'</span>)
+<span class="bu">print</span>(result1)
+<span class="bu">print</span>(result2)
+<span class="bu">print</span>(result3)</code></pre></div>
+<p><em>执行结果:</em></p>
+<pre><code>False
+True
+False</code></pre>
+<h2 id="多个装饰器的顺序">7.多个装饰器的顺序</h2>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="kw">def</span> wholelogin(func):
+    <span class="kw">def</span> __innerlogin(login_args):
+        <span class="bu">print</span>(<span class="st">'enter login.'</span>)
+        func(login_args)
+        <span class="bu">print</span>(<span class="st">'exit login.'</span>)
+    <span class="cf">return</span> __innerlogin
+
+<span class="kw">def</span> other(func):    <span class="co"># define an other decorator</span>
+    <span class="kw">def</span> __decorator(login_args):
+        <span class="bu">print</span>(<span class="st">'***other decorator begin***'</span>)
+        func(login_args)
+        <span class="bu">print</span>(<span class="st">'***other decorator end***'</span>)
+    <span class="cf">return</span> __decorator
+
+
+<span class="bu">print</span>(<span class="st">'decorator WHOLELOGIN:'</span>)
+<span class="at">@wholelogin</span>
+<span class="kw">def</span> login(name):
+    <span class="bu">print</span>(<span class="st">'</span><span class="sc">%s</span><span class="st"> is login.'</span> <span class="op">%</span> name)
+
+login(<span class="st">'cc'</span>)
+ 
+<span class="bu">print</span>(<span class="st">'decorator : 1) OTHERS 2) WHOLELOGIN'</span>)
+<span class="at">@other</span>
+<span class="at">@wholelogin</span>
+<span class="kw">def</span> login(name):
+    <span class="bu">print</span>(<span class="st">'</span><span class="sc">%s</span><span class="st"> in login.'</span> <span class="op">%</span> name)
+
+login(<span class="st">'cc'</span>)
+
+ 
+<span class="bu">print</span>(<span class="st">'decorator: 1) WHOLELOGIN 2) OTHERS'</span>)
+<span class="at">@wholelogin</span>
+<span class="at">@other</span>
+<span class="kw">def</span> login(name):
+    <span class="bu">print</span>(<span class="st">'</span><span class="sc">%s</span><span class="st"> in login.'</span> <span class="op">%</span> name)
+ 
+login(<span class="st">'cc'</span>)</code></pre></div>
+<p><em>执行结果:</em></p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">decorator WHOLELOGIN:
+enter login.
+cc <span class="op">is</span> login.
+exit login.
+decorator : <span class="dv">1</span>) OTHERS <span class="dv">2</span>) WHOLELOGIN
+<span class="op">***</span>other decorator begin<span class="op">***</span>
+enter login.
+cc <span class="op">in</span> login.
+exit login.
+<span class="op">***</span>other decorator end<span class="op">***</span>
+decorator: <span class="dv">1</span>) WHOLELOGIN <span class="dv">2</span>) OTHERS
+enter login.
+<span class="op">***</span>other decorator begin<span class="op">***</span>
+cc <span class="op">in</span> login.
+<span class="op">***</span>other decorator end<span class="op">***</span>
+exit login.</code></pre></div>
+<blockquote>
+<p>写在前面的decorator在&quot;外层&quot;, 先调用.</p>
+</blockquote>
+</body>
+</html>
