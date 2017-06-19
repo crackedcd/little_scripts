@@ -47,9 +47,20 @@ class RDS(object):
             return r
         return __wrapper
 
+    '''
     @staticmethod
     @__timethis
     def __info(ip, p):
+        try:
+            r = redis.Redis(host = ip, port = p, db = 0, socket_timeout = 2)
+            info = r.info()
+            print("%s:%s -> %s" % (ip, p, info["used_memory_peak_human"]))
+        except (redis.exceptions.ConnectionError, ValueError) as e:
+            print("ERROR: %s:%s connection failed." % (ip, p))
+    '''
+
+    @__timethis
+    def __info(self, ip, p):
         try:
             r = redis.Redis(host = ip, port = p, db = 0, socket_timeout = 2)
             info = r.info()
@@ -60,10 +71,13 @@ class RDS(object):
     def reversal(self):
         spawn_list = []
         for ip, port in self.__rds_dict.items():
-            spawn_list.append(gevent.spawn(RDS.__info, ip, port))
+            #spawn_list.append(gevent.spawn(RDS.__info, ip, port))
+            spawn_list.append(gevent.spawn(self.__info, ip, port))
+        '''
         #for s in self.__rds_list:
             #for ip, port in s.items():
                 #spawn_list.append(gevent.spawn(self.__info, ip, port))
+        '''
         gevent.joinall(spawn_list)
 
 
