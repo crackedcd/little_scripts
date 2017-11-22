@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-
 from gevent import monkey; monkey.patch_all()
 import gevent
 from multiprocessing.dummy import Pool as ThreadPool
@@ -10,9 +9,12 @@ import time
 
 def pp(string):
     string1, string2 = string
-    #print("%s->%s" % (string1, string2))
-    time.sleep(0.2)
+    print("%s->%s" % (string1, string2))
+    time.sleep(0.5)
 
+def normal_p(i_list):
+    for i in i_list:
+        pp(i)
 
 def map_p(i_list):
     pool = ThreadPool(20)
@@ -54,14 +56,15 @@ def stackless_p(i_list):
 
 if __name__ == "__main__":
     i_list = []
-    for i in range(1, 1001):
+    for i in range(1, 10):
         i_list.append(("number", i))
 
-    print(i_list)
+    #print(i_list)
     begin = time.time()
+    normal_p(i_list)
     #map_p(i_list)
     #async_p(i_list)
-    thread_p(i_list)
+    #thread_p(i_list)
     #gevent_p(i_list)
     end = time.time()
     print("elapsed: %ss." % (end - begin))
